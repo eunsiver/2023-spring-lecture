@@ -1,53 +1,54 @@
 package com.example.springbootlecture.service;
 
+
+import com.example.springbootlecture.domain.entity.Log;
 import com.example.springbootlecture.domain.entity.Movie;
 import com.example.springbootlecture.domain.reponse.MovieResponse;
 import com.example.springbootlecture.domain.request.MovieRequest;
-import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Service;
+import com.example.springbootlecture.repository.LogRepository;
+import com.example.springbootlecture.repository.MovieRepository;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MovieService {
 
-    private final static List<Movie> movies = new ArrayList<>();
+    //내부 도메인은 repository로
+    private final MovieRepository movieRepository;
+    //외부 도메인은 service로 분리해주는 것이 layered architecture에 맞다.
+    private final LogService logService;
+    public MovieResponse getMovie(long movieId) {
 
-    @PostConstruct//MovieService가 생성되면 init()메소드를 실행하라는 어노테이션
-    public void init(){
-        movies.addAll( List.of(new Movie(1L, "스타워즈", 1977, LocalDateTime.now()),
-                new Movie(2L, "아바타", 2009, LocalDateTime.now()),
-                new Movie(3L, "인터스텔라", 2014, LocalDateTime.now()),
-                new Movie(4L, "인셉션", 2010, LocalDateTime.now()),
-                new Movie(5L, "테넷", 2020, LocalDateTime.now())));
+        Movie movie = movieRepository.findById(movieId).orElseThrow();
+        return MovieResponse.of(movie);
     }
 
-    public Movie getMovie(long movieId) {
-        return movies.stream()
-                .filter(movie -> movie.getId() == movieId)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 영화가 없습니다."));
+    @Transactional
+    public void saveMovie(MovieRequest movieRequest) {
+
+        Movie movie = new Movie(movieRequest.getName(), movieRequest.getProductionYear());
+
+        movieRepository.save(movie);
+        logService.saveLog();
+        throw new RuntimeException("강제 에러");
     }
 
-    public List<MovieResponse> getMovies() {
-        return movies.stream().map(MovieResponse::of).toList();
-    }
-
-    public void createMovie(MovieRequest movieRequest) {
-        Movie movie = new Movie(movies.size() + 1, movieRequest.getName(), movieRequest.getProductionYear(), LocalDateTime.now());
-        movies.add(movie);
-    }
-
-    public void updateMovie(long movieId, MovieRequest movieRequest) {
-        Movie movie = getMovie(movieId);
-        movie.setName(movieRequest.getName());
-        movie.setProductionYear(movieRequest.getProductionYear());
-    }
-
-    public void deleteMovie(long movieId) {
-        Movie movie = getMovie(movieId);
-        movies.remove(movie);
-    }
+//    public List<MovieResponse> getMovies() {
+//
+//    }
+//
+//    public void createMovie(MovieRequest movieRequest) {
+//
+//    }
+//
+//    public void updateMovie(long movieId, MovieRequest movieRequest) {
+//
+//    }
+//
+//    public void deleteMovie(long movieId) {
+//     }
 }

@@ -15,6 +15,5 @@ public class ExceptionController {
 
        ExceptionResponse exceptionResponse = new ExceptionResponse("데이터 좀 잘 빼자", HttpStatus.INTERNAL_SERVER_ERROR.value());
        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
-    }
-}
+    }}
 
