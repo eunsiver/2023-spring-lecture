@@ -36,12 +36,12 @@ public class MovieController {
     public void createMovie(@RequestBody MovieRequest movieRequest){
         movieService.saveMovie(movieRequest);
     }
-//
-//    @PutMapping("v1/movies/{movieId}")
-//    public void updateMovie(@PathVariable long movieId, @RequestBody MovieRequest movieRequest){
-//
-//        movieService.updateMovie(movieId, movieRequest);
-//    }
+
+    @PutMapping("v1/movies/{movieId}")
+    public void updateMovie(@PathVariable long movieId, @RequestBody MovieRequest movieRequest){
+
+        movieService.updateMovie(movieId, movieRequest);
+    }
 //
 //    @DeleteMapping("v1/movies/{movieId}")
 //    public void deleteMovie(

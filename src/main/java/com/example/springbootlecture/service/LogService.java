@@ -12,10 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class LogService {
     private final LogRepository logRepository;
 
+
     /*
-    * REQUIRE: 같은 범주에 있는 트랜잭션을 묶어
+    * 별도의 트랜잭션으로 분리해서 rollback이 되어도 log가 실행되도록
     * */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)//새로운 트랜잭션을 만들겠어
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveLog(){
         logRepository.save(new Log());
     }

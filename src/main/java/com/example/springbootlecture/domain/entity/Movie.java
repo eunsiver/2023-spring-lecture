@@ -30,4 +30,7 @@ public class Movie {
         this.name=name;
         this.productionYear=productionYear;
     }
+    public void setName(String name){
+        this.name=name;
+    }
 }
