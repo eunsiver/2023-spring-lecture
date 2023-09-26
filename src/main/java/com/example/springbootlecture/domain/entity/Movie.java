@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -25,6 +26,13 @@ public class Movie {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt=LocalDateTime.now();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "director_id")
+    private Director director;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Actor> actors;
 
     public Movie(String name, int productionYear){
         this.name=name;

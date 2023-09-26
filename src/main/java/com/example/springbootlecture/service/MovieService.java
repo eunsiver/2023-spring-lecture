@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -27,6 +29,11 @@ public class MovieService {
         return MovieResponse.of(movie);
     }
 
+    public List<MovieResponse> getMovies(){
+        List<Movie> movies = movieRepository.findByProductionYear(2020);
+        return movies.stream().map(MovieResponse::of).toList();
+    }
+
     @Transactional
     public void saveMovie(MovieRequest movieRequest) {
 
@@ -40,6 +47,12 @@ public class MovieService {
     public void updateMovie(long movieId, MovieRequest movieRequest) {
         Movie movie = movieRepository.findById(movieId).orElseThrow();
         movie.setName("변경1");
+    }
+
+    @Transactional
+    public void removeMovie(long movieId) {
+        Movie movie = movieRepository.findById(movieId).orElseThrow();
+        movieRepository.delete(movie);
     }
 
 }
