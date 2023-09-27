@@ -11,7 +11,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "movie")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Movie {
 
     @Id
@@ -40,5 +40,12 @@ public class Movie {
     }
     public void setName(String name){
         this.name=name;
+    }
+
+    public void setDirector(Director director){
+        this.director=director;
+    }
+    public void setActors(List<Actor> actors){
+        this.actors=actors;
     }
 }

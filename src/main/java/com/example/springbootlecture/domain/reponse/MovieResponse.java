@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class MovieResponse {
-    private long id;
+    private Long id;
     private String name;
     private Integer productionYear;
     private String directorName;
